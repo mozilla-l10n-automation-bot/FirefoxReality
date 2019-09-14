@@ -49,6 +49,7 @@ import org.mozilla.vrbrowser.browser.engine.SessionStack;
 import org.mozilla.vrbrowser.crashreporting.CrashReporterService;
 import org.mozilla.vrbrowser.crashreporting.GlobalExceptionHandler;
 import org.mozilla.vrbrowser.geolocation.GeolocationWrapper;
+import org.mozilla.vrbrowser.telemetry.GleanMetricsService;
 import org.mozilla.vrbrowser.ui.widgets.prompts.ConfirmPromptWidget;
 import org.mozilla.vrbrowser.utils.DeviceType;
 import org.mozilla.vrbrowser.input.MotionEventGenerator;
@@ -330,6 +331,7 @@ public class VRBrowserActivity extends PlatformActivity implements WidgetManager
         SettingsStore.getInstance(getBaseContext()).setPid(Process.myPid());
         super.onStart();
         TelemetryWrapper.start();
+        GleanMetricsService.start();
     }
 
     @Override
@@ -342,6 +344,7 @@ public class VRBrowserActivity extends PlatformActivity implements WidgetManager
         }
 
         TelemetryWrapper.stop();
+        GleanMetricsService.stop();
     }
 
     @Override
