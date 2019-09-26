@@ -1423,6 +1423,7 @@ public class WindowWidget extends UIWidget implements SessionChangeListener,
             mContextMenu = null;
         }
         if (mSelectionMenu != null) {
+            mSelectionMenu.setDelegate((SelectionActionWidget.Delegate)null);
             mSelectionMenu.hide(REMOVE_WIDGET);
             mSelectionMenu.releaseWidget();
             mSelectionMenu = null;
@@ -1584,11 +1585,20 @@ public class WindowWidget extends UIWidget implements SessionChangeListener,
         mSelectionMenu.mWidgetPlacement.parentHandle = getHandle();
         mSelectionMenu.setActions(aActions);
         mSelectionMenu.setSelectionRect(aSelection.clientRect);
-        mSelectionMenu.setDelegate(action -> {
-            hideContextMenus();
-            aResponse.respond(action);
+        mSelectionMenu.setDelegate(new SelectionActionWidget.Delegate() {
+            @Override
+            public void onAction(String action) {
+                hideContextMenus();
+                aResponse.respond(action);
+            }
+
+            @Override
+            public void onDismiss() {
+                hideContextMenus();
+                aResponse.respond(GeckoSession.SelectionActionDelegate.ACTION_UNSELECT);
+            }
         });
-        mSelectionMenu.show(REQUEST_FOCUS);
+        mSelectionMenu.show(KEEP_FOCUS);
     }
 
     @Override

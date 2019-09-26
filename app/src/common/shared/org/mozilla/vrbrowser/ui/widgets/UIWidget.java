@@ -303,10 +303,11 @@ public abstract class UIWidget extends FrameLayout implements Widget {
         return mRenderer != null && mRenderer.isLayer();
     }
 
-    @IntDef(value = { REQUEST_FOCUS, CLEAR_FOCUS })
+    @IntDef(value = { REQUEST_FOCUS, CLEAR_FOCUS, KEEP_FOCUS })
     public @interface ShowFlags {}
     public static final int REQUEST_FOCUS = 0;
     public static final int CLEAR_FOCUS = 1;
+    public static final int KEEP_FOCUS = 2;
 
     public void show(@ShowFlags int aShowFlags) {
         if (!mWidgetPlacement.visible) {
@@ -318,8 +319,7 @@ public abstract class UIWidget extends FrameLayout implements Widget {
         setFocusableInTouchMode(false);
         if (aShowFlags == REQUEST_FOCUS) {
             requestFocusFromTouch();
-
-        } else {
+        } else if (aShowFlags == CLEAR_FOCUS) {
             clearFocus();
         }
     }
@@ -370,6 +370,12 @@ public abstract class UIWidget extends FrameLayout implements Widget {
         mWidgetManager.updateWidget(this);
         if (!aVisible) {
             clearFocus();
+        }
+    }
+
+    public void updateWidget() {
+        if (mWidgetManager != null) {
+            mWidgetManager.updateWidget(this);
         }
     }
 
