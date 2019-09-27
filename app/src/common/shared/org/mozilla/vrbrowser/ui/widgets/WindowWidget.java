@@ -7,6 +7,7 @@ package org.mozilla.vrbrowser.ui.widgets;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
@@ -1584,6 +1585,9 @@ public class WindowWidget extends UIWidget implements SessionChangeListener,
         mSelectionMenu = new SelectionActionWidget(getContext());
         mSelectionMenu.mWidgetPlacement.parentHandle = getHandle();
         mSelectionMenu.setActions(aActions);
+        Matrix matrix = new Matrix();
+        aSession.getClientToSurfaceMatrix(matrix);
+        matrix.mapRect(aSelection.clientRect);
         mSelectionMenu.setSelectionRect(aSelection.clientRect);
         mSelectionMenu.setDelegate(new SelectionActionWidget.Delegate() {
             @Override
